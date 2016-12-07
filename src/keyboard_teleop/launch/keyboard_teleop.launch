@@ -1,0 +1,7 @@
+<launch>
+        <node pkg="keyboard" type="keyboard" name="keyboard" output="screen">
+        </node>
+        <node pkg="keyboard_teleop" type="keyboard_teleop" name="keyboard_teleop" output="screen">
+        </node>
+</launch>
+

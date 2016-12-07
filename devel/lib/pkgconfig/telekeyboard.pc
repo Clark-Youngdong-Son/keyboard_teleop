@@ -1,0 +1,8 @@
+prefix=/home/youngdong/ROS/keyboard_teleop/devel
+
+Name: telekeyboard
+Description: Description of telekeyboard
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/youngdong/ROS/keyboard_teleop/devel/lib 
+Requires: 

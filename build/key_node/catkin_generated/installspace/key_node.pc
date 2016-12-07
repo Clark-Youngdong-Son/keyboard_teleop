@@ -1,0 +1,8 @@
+prefix=/home/youngdong/ROS/keyboard_teleop/install
+
+Name: key_node
+Description: Description of key_node
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/youngdong/ROS/keyboard_teleop/install/lib 
+Requires: 
