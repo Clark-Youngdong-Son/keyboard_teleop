@@ -12,6 +12,7 @@ int main(int argc, char **argv)
 	ros::Rate rate(100);
 	while(ros::ok())
 	{
+        ros::Duration(1.0).sleep();
 		if(object->check_connection())
 		{
 			ROS_INFO("Pixhawk connected");
@@ -20,7 +21,6 @@ int main(int argc, char **argv)
 		else
 		{
 			ROS_INFO("Pixhawk not connected");
-			ros::Duration(1.0).sleep();
 		}
 	}
 

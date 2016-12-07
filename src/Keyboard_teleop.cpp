@@ -5,11 +5,12 @@ using namespace syd;
 
 Keyboard_teleop::Keyboard_teleop(double _gridSize) : gridSize(_gridSize), initializeFlag(false), isOffBoard(false)
 {
-	state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 10, &Keyboard_teleop::state_callback, this);
+	state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 1, &Keyboard_teleop::state_callback, this);
 	local_position_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &Keyboard_teleop::local_position_callback, this);
 	keyboard_sub = nh.subscribe<keyboard::Key>("keyboard/keydown", 10, &Keyboard_teleop::keyboard_callback, this);
 	
 	setpoint_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local",10);
+
 	arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
 	set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 }
