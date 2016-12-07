@@ -1,8 +1,0 @@
-prefix=/home/youngdong/ROS/keyboard_teleop/install
-
-Name: keyboard_teleop
-Description: Description of keyboard_teleop
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/youngdong/ROS/keyboard_teleop/install/lib 
-Requires: 
