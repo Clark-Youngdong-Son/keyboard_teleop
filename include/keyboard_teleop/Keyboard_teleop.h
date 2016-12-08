@@ -19,11 +19,8 @@
 #define KEY_N 110	//set stabilized
 #define KEY_I 105	//initialize
 
-#define SET_STABILIZED -3
-#define SET_OFFBOARD -2
-#define SET_ARM -33
-#define SET_DISARM -22
-
+#define ARMED -22
+#define DISARMED -33
 
 namespace syd {
 
@@ -39,7 +36,6 @@ namespace syd {
 		ros::NodeHandle nh;	
 
 		mavros_msgs::State current_state;
-		mavros_msgs::SetMode setMode_cmd;
 		mavros_msgs::CommandBool arm_cmd;
 		geometry_msgs::PoseStamped current_pose, set_pose;
 		
@@ -53,8 +49,6 @@ namespace syd {
 		void keyboard_callback(const keyboard::Key::ConstPtr&);
 		void initialize();
 		bool initializeFlag;
-		bool setMode(int);
-		bool isOffBoard;
 		bool setArming(int);
 	
 		int key_in;

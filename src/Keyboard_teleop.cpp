@@ -3,7 +3,7 @@
 
 using namespace syd;
 
-Keyboard_teleop::Keyboard_teleop(double _gridSize) : gridSize(_gridSize), initializeFlag(false), isOffBoard(false)
+Keyboard_teleop::Keyboard_teleop(double _gridSize) : gridSize(_gridSize), initializeFlag(false)
 {
 	state_sub = nh.subscribe<mavros_msgs::State>("mavros/state", 1, &Keyboard_teleop::state_callback, this);
 	local_position_sub = nh.subscribe<geometry_msgs::PoseStamped>("mavros/local_position/pose", 10, &Keyboard_teleop::local_position_callback, this);
@@ -18,7 +18,7 @@ Keyboard_teleop::Keyboard_teleop(double _gridSize) : gridSize(_gridSize), initia
 
 bool Keyboard_teleop::setArming(int _mode)
 {
-	if(_mode == SET_ARM)
+	if(_mode == ARMED)
 	{
 		if(current_state.armed)
 		{
@@ -52,7 +52,7 @@ bool Keyboard_teleop::setArming(int _mode)
 		}
 	}
 
-	else if(_mode == SET_DISARM)
+	else if(_mode == DISARMED)
 	{
 		if(!current_state.armed)
 		{
@@ -65,7 +65,7 @@ bool Keyboard_teleop::setArming(int _mode)
 			if(arming_client.call(arm_cmd) && arm_cmd.response.success)
 			{
 				ros::Duration(1).sleep();
-               			ros::spinOnce();
+               	ros::spinOnce();
 				if(!current_state.armed)
 				{
 					ROS_INFO("Disarmed");
@@ -84,89 +84,6 @@ bool Keyboard_teleop::setArming(int _mode)
 			}
 		}
 	}
-}
-
-bool Keyboard_teleop::setMode(int _mode)
-{
-	if(_mode == SET_STABILIZED)
-	{
-		if(!current_state.armed)
-		{
-			ROS_INFO("Not armed");
-			return false;
-		}
-		else if(current_state.mode == "STABILIZED")
-		{
-			ROS_INFO("Already stabilized mode");
-			initialize();
-			return true;
-		}
-		else
-		{
-			setMode_cmd.request.custom_mode = "STABILIZED";
-			if(set_mode_client.call(setMode_cmd) && setMode_cmd.response.success)
-			{
-				ros::Duration(2).sleep();
-				if(current_state.mode == "STABILIZED")
-				{
-					ROS_INFO("Changed to stabilized mode");
-					isOffBoard = false;
-					return true;
-				}
-				else
-				{
-					ROS_INFO("Stabilized mode change failed");
-					return false;
-				}
-			}
-			else
-			{
-				ROS_INFO("Stabilized mode change failed");
-				return false;
-			}
-		}
-	}
-	else if(_mode == SET_OFFBOARD)
-	{
-		if(!current_state.armed)
-		{
-			ROS_INFO("Not armed");
-			return false;
-		}
-		else if(current_state.mode == "OFFBOARD")
-		{
-			ROS_INFO("Already offboard mode");
-			initialize();
-			return true;
-		}
-		else
-		{
-			setMode_cmd.request.custom_mode = "OFFBOARD";
-			if(set_mode_client.call(setMode_cmd) && setMode_cmd.response.success)
-			{
-//				ros::Duration(2).sleep();
-				if(current_state.mode == "OFFBOARD")
-				{
-					ROS_INFO("Changed to offboard mode");
-					isOffBoard = true;
-					initialize();
-					return true;
-				}
-				else
-				{
-					ROS_INFO("Offboard mode change failed");
-					return false;
-				}
-			}
-			else
-			{
-				ROS_INFO("Offboard mode change failed");
-				return false;
-			}
-		}
-
-	}
-
 }
 
 void Keyboard_teleop::update()
@@ -229,25 +146,12 @@ void Keyboard_teleop::update()
 		break;
 
 		case KEY_SPACE :
-			setArming(SET_DISARM);
-		break;
-
-		case KEY_C :
-		setArming(SET_DISARM);	
+			setArming(DISARMED);
 		break;
 
 		case KEY_V :
-		setArming(SET_ARM);
-		initialize();
-		break;
-
-		case KEY_B :
-		//setMode(SET_OFFBOARD);
-		//initialize();
-		break;
-
-		case KEY_N :
-		//setMode(SET_STABILIZED);
+		    setArming(ARMED);
+		    initialize();
 		break;
 
 		default :
@@ -267,8 +171,6 @@ bool Keyboard_teleop::check_connection()
 void Keyboard_teleop::state_callback(const mavros_msgs::State::ConstPtr& msg)
 {
 	current_state = *msg;
-	if(current_state.mode == "OFFBOARD") isOffBoard = true;
-	else isOffBoard = false;
 }
 
 void Keyboard_teleop::local_position_callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
