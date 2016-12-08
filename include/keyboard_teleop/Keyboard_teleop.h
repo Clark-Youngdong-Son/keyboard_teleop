@@ -4,7 +4,7 @@
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/State.h>
 #include <keyboard/Key.h>
-#include <std_msgs/Float64.h>
+#include <std_msgs/Bool.h>
 
 #define KEY_W 119	//forward
 #define KEY_A 97	//left
@@ -15,8 +15,8 @@
 #define KEY_SPACE 32	//all kill
 #define KEY_C 99	//disarm
 #define KEY_V 118	//arm
-#define KEY_B 98	//set offboard
-#define KEY_N 110	//set stabilized
+#define KEY_B 98	//Robot arm switch off
+#define KEY_N 110	//Robot arm switch on
 #define KEY_I 105	//initialize
 
 #define ARMED -22
@@ -40,16 +40,16 @@ namespace syd {
 		geometry_msgs::PoseStamped current_pose, set_pose;
 		
 		ros::Subscriber state_sub, local_position_sub, keyboard_sub;
-		ros::Publisher setpoint_pub;
+		ros::Publisher setpoint_pub, robotArm_pub;
 		ros::ServiceClient arming_client, set_mode_client;
 
-		
 		void state_callback(const mavros_msgs::State::ConstPtr&);
 		void local_position_callback(const geometry_msgs::PoseStamped::ConstPtr&);
 		void keyboard_callback(const keyboard::Key::ConstPtr&);
 		void initialize();
 		bool initializeFlag;
 		bool setArming(int);
+        bool robotArmSwitch;
 	
 		int key_in;
 		double gridSize;

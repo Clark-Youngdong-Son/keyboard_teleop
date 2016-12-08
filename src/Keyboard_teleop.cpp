@@ -10,6 +10,7 @@ Keyboard_teleop::Keyboard_teleop(double _gridSize) : gridSize(_gridSize), initia
 	keyboard_sub = nh.subscribe<keyboard::Key>("keyboard/keydown", 10, &Keyboard_teleop::keyboard_callback, this);
 	
 	setpoint_pub = nh.advertise<geometry_msgs::PoseStamped>("mavros/setpoint_position/local",10);
+    robotArm_pub = nh.advertise<std_msgs::Bool>("keyboard/robot_arm_switch",1);
 
 	arming_client = nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
 	set_mode_client = nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
@@ -154,6 +155,13 @@ void Keyboard_teleop::update()
 		    initialize();
 		break;
 
+		case KEY_B :
+		    robotArmSwitch = false;
+		break;
+
+		case KEY_N :
+		    robotArmSwitch = true;
+		break;
 		default :
 		;
 //		ROS_INFO("Not assigned key");
@@ -199,4 +207,16 @@ void Keyboard_teleop::publish()
 		//set_pose.header.stamp = ros::Time::now();
 		setpoint_pub.publish(set_pose);
 	}
+
+    std_msgs::Bool robotSwitch;
+    if(robotArmSwitch)
+    {
+        robotSwitch.data = true;
+        robotArm_pub.publish(robotSwitch);
+    }
+    else
+    {
+        robotSwitch.data = false;
+        robotArm_pub.publish(robotSwitch);
+    }
 }
