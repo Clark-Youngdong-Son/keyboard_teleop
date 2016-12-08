@@ -5,14 +5,20 @@ ICSL drone flight project team
 Control Pixhawk with keyboard.
 
 ### Commands ###
-V : Arm & Initialize setpoint as current position
+V : arm & initialize setpoint as current position
 Space : Disarm
+
 W : decrease x of setpoint with gridSize
+
 A : decrease y of setpoint with gridSize
+
 S : increase x of setpoint with gridSize
+
 D : increase y of setpoint with gridSize
 
+
 O : decrease altitude of setpoint with 0.2*gridSize
+
 P : increase altitude of setpoint with 0.2*gridSize
 
 
