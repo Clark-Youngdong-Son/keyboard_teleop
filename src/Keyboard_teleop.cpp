@@ -65,6 +65,7 @@ bool Keyboard_teleop::setArming(int _mode)
 			if(arming_client.call(arm_cmd) && arm_cmd.response.success)
 			{
 				ros::Duration(1).sleep();
+                ros::spinOnce();
 				if(!current_state.armed)
 				{
 					ROS_INFO("Disarmed");
