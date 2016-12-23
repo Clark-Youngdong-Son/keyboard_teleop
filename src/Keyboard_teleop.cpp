@@ -204,7 +204,7 @@ void Keyboard_teleop::publish()
 {
 	if(initializeFlag)
 	{
-		//set_pose.header.stamp = ros::Time::now();
+		set_pose.header.stamp = ros::Time::now();
 		setpoint_pub.publish(set_pose);
 	}
 
